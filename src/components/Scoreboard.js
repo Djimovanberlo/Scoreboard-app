@@ -1,6 +1,27 @@
 import React, { useState } from "react";
 import Player from "./Player";
 
+function compare_score(player_a, player_b) {
+  return player_b.score - player_a.score;
+}
+
+function compare_name(player_a, player_b) {
+  return player_a.name.localeCompare(player_b.name);
+}
+
+// this shit compares either -1, 0 or 1 based on alphabet. When used as callback into .sort, this value somehow orders string elements in array
+// // below code works basically the same way (commented out)
+
+// function compare_name(player_a, player_b) {
+//   if (player_a.name < player_b.name) {
+//     return -1;
+//   } else if (player_a.name > player_b.name) {
+//     return 1;
+//   } else {
+//     return 0;
+//   }
+// }
+
 export default function Scoreboard() {
   const [players, set_players] = useState([
     { id: 1, name: "Djimo", score: 37 },
@@ -9,9 +30,41 @@ export default function Scoreboard() {
     { id: 4, name: "Boy", score: 73 },
   ]);
 
-  const newArray = players.map((player) => (
-    <Player id={player.id} name={player.name} score={player.score} />
+  const [sort_by, set_sort_by] = useState("score");
+
+  const change_sorting = (event) => {
+    console.log("new sort order:", event.target.value);
+    set_sort_by(event.target.value);
+  };
+
+  const players_sorted = [...players];
+  // copy players[] array into a new array, to avoid repetition. .Map, or other methods
+  // will get messy if you use the original players[] array
+
+  // below are three ways to sort: sort by name through if...else; sort by name through localeCompare
+  // read above functions for reference.
+  // two of these .sorts() are currently commented out for cleanliness
+
+  if (sort_by === "name") {
+    players_sorted.sort(compare_name);
+  } else if (sort_by === "score") {
+    players_sorted.sort(compare_score);
+  }
+
+  const newArray = players_sorted.map((player) => (
+    <Player key={player.id} name={player.name} score={player.score} />
   ));
 
-  return <div className="Scoreboard">{newArray}</div>;
+  return (
+    <div>
+      <p className="Scoreboard">{newArray}</p>
+      <p>
+        Sort order:{" "}
+        <select onChange={change_sorting}>
+          <option value="score">Sort by score</option>
+          <option value="name">Sort by name</option>
+        </select>{" "}
+      </p>
+    </div>
+  );
 }
