@@ -1,24 +1,25 @@
 import React, { useState } from "react";
 
-export default function AddPlayerForm() {
-  const [name, set_name] = useState();
+export default function AddPlayerForm(props) {
+  const [name, set_name] = useState("Set player name");
+
+  function addPlayerSubmit(event) {
+    event.preventDefault();
+    props.addNewPlayer(name);
+    console.log(name);
+  }
   return (
-    <div className="AddPlayerForm">
-      <p>
-        {" "}
-        New player: {""}
-        <input
-          type="text"
-          placeholder="new player name"
-          value={name}
-          onChange={(event) => {
-            set_name(event.target.value);
-            console.log("new input:", event.target.value);
-          }}
-        />
-        {""}
-        <button>Add</button>
-      </p>
-    </div>
+    <form onSubmit={addPlayerSubmit}>
+      <label>name</label>
+      <input
+        type="text"
+        value={name}
+        onChange={(event) => {
+          set_name(event.target.value);
+          console.log("new input:", event.target.value);
+        }}
+      />
+      <input type="submit" />
+    </form>
   );
 }

@@ -9,7 +9,6 @@ function App() {
       <h1>Scoreboard Lyfe</h1>
       <main>
         <Scoreboard />
-        <AddPlayerForm />
       </main>
     </div>
   );

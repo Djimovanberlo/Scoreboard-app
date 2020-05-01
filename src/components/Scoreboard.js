@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Player from "./Player";
+import AddPlayerForm from "./AddPlayerForm";
 
 function compare_score(player_a, player_b) {
   return player_b.score - player_a.score;
@@ -35,6 +36,18 @@ export default function Scoreboard() {
   function change_sorting(event) {
     console.log("new sort order:", event.target.value);
     set_sort_by(event.target.value);
+  }
+
+  function addNewPlayer(name) {
+    console.log("dit is het", name);
+    const newPlayer = {
+      id: players.length + 1,
+      name: name,
+      score: 0,
+    };
+    const updatedPlayers = [...players, newPlayer];
+    console.log("www", updatedPlayers);
+    set_players(updatedPlayers);
   }
 
   function incrementScore(id, changeBy) {
@@ -87,6 +100,7 @@ export default function Scoreboard() {
           <option value="score">Sort by score</option>
           <option value="name">Sort by name</option>
         </select>{" "}
+        <AddPlayerForm addNewPlayer={addNewPlayer} />
       </div>
     </div>
   );
