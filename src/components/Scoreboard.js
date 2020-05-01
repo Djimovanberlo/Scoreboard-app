@@ -32,10 +32,27 @@ export default function Scoreboard() {
 
   const [sort_by, set_sort_by] = useState("score");
 
-  const change_sorting = (event) => {
+  function change_sorting(event) {
     console.log("new sort order:", event.target.value);
     set_sort_by(event.target.value);
-  };
+  }
+
+  function incrementScore(id, changeBy) {
+    console.log("ID:", id, "CHANGEBY: ", changeBy);
+    const new_players_array = players.map((player) => {
+      console.log(player, id);
+      if (player.id === id) {
+        return {
+          id: player.id,
+          name: player.name,
+          score: player.score + changeBy,
+        };
+      }
+      return player;
+    });
+    console.log(new_players_array);
+    set_players(new_players_array);
+  }
 
   const players_sorted = [...players];
   // copy players[] array into a new array, to avoid repetition. .Map, or other methods
@@ -52,19 +69,25 @@ export default function Scoreboard() {
   }
 
   const newArray = players_sorted.map((player) => (
-    <Player key={player.id} name={player.name} score={player.score} />
+    <Player
+      key={player.id}
+      id={player.id}
+      name={player.name}
+      score={player.score}
+      incrementScore={incrementScore} // note the absence of player.incrementScore!
+    />
   ));
 
   return (
     <div>
-      <p className="Scoreboard">{newArray}</p>
-      <p>
+      <div className="Scoreboard">{newArray}</div>
+      <div>
         Sort order:{" "}
         <select onChange={change_sorting}>
           <option value="score">Sort by score</option>
           <option value="name">Sort by name</option>
         </select>{" "}
-      </p>
+      </div>
     </div>
   );
 }
